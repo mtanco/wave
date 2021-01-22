@@ -64,7 +64,7 @@ const
     toolbar: {
       color: theme.colors.card,
       $nest: {
-        '&:hover': {
+        '&:hover,.is-expanded': {
           backgroundColor: theme.colors.card,
           color: theme.colors.text,
         }
@@ -74,25 +74,22 @@ const
       backgroundColor: palette.themePrimary,
       $nest: {
         '.ms-ContextualMenu-item:hover': {
-          color: theme.colors.text,
+          color: palette.themePrimary,
           background: theme.colors.card
         },
         '.ms-ContextualMenu-itemText': {
           color: theme.colors.card,
           $nest: {
             '&:hover': {
-              color: theme.colors.text
+              color: palette.themePrimary
             }
           }
         },
         '.ms-ContextualMenu-link:hover,.ms-ContextualMenu-link.is-expanded': {
           backgroundColor: theme.colors.card,
           $nest: {
-            '.ms-ContextualMenu-itemText': {
-              color: theme.colors.text
-            },
-            '.ms-ContextualMenu-submenuIcon': {
-              color: theme.colors.text
+            '.ms-ContextualMenu-itemText,.ms-ContextualMenu-submenuIcon': {
+              color: `${palette.themePrimary} !important`
             }
           }
         },
