@@ -20,23 +20,22 @@ import * as T from './qd'
 const
   name = 'header',
   hashName = `#${name}`,
-  label = 'label',
-  headerProps: T.Card<any> = {
-    name,
-    state: { items: [{ name, label }] },
-    changed: T.box(false)
-  }
+  label = 'label'
+
+let headerProps: T.Card<any>
 
 describe('Header.tsx', () => {
+  beforeEach(() => {
+    headerProps = {
+      name,
+      state: { items: [{ name: 'header-item', label }] },
+      changed: T.box(false)
+    }
+  })
 
   it('Renders data-test attr', () => {
     const { queryByTestId } = render(<View {...headerProps} />)
     expect(queryByTestId(name)).toBeInTheDocument()
-  })
-
-  it('Sets args - init', () => {
-    render(<View {...headerProps} />)
-    expect(T.qd.args[name]).toBe(false)
   })
 
   it('Sets args and calls sync on click', () => {
@@ -46,7 +45,7 @@ describe('Header.tsx', () => {
     const { getByText } = render(<View {...headerProps} />)
     fireEvent.click(getByText(label))
 
-    expect(T.qd.args[name]).toBe(true)
+    expect(T.qd.args['header-item']).toBe(true)
     expect(syncMock).toHaveBeenCalled()
     expect(window.location.hash).toBe('')
   })
@@ -59,8 +58,20 @@ describe('Header.tsx', () => {
     const { getByText } = render(<View {...headerProps} />)
     fireEvent.click(getByText(label))
 
-    expect(T.qd.args[hashName]).toBe(false)
+    expect(T.qd.args[hashName]).toBe(undefined)
     expect(syncMock).toHaveBeenCalledTimes(0)
     expect(window.location.hash).toBe(hashName)
+  })
+
+  it('should show nested submenus', () => {
+    const subText = 'SubItem'
+    headerProps.state.items[0].items = [{ name: subText, label: subText, items: [{ name: '' }] }]
+
+    const { getByText, getAllByRole } = render(<View {...headerProps} />)
+
+    fireEvent.click(getByText(label))
+    fireEvent.click(getByText(subText))
+
+    expect(getAllByRole('menu')).toHaveLength(2)
   })
 })
