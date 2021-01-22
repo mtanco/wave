@@ -17,9 +17,8 @@ import React from 'react'
 import { stylesheet } from 'typestyle'
 import { CardEffect, cards } from './layout'
 import { NavGroup, XNav } from './nav'
-import { B, bond, Box, box, Card, S } from './qd'
-import { clas, getTheme, padding } from './theme'
-import { Command, View as Toolbar } from './toolbar'
+import { B, bond, Box, box, Card, S, qd } from './qd'
+import { clas, getTheme, padding, palette } from './theme'
 
 const
   theme = getTheme(),
@@ -57,9 +56,57 @@ const
       top: -5, // nudge up slightly to account for padding
       ...theme.font.s12,
     },
+    toolbar: {
+      color: theme.colors.card,
+      $nest: {
+        '&:hover': {
+          backgroundColor: theme.colors.card,
+          color: theme.colors.text,
+        }
+      }
+    },
+    toolbarMenu: {
+      backgroundColor: palette.themePrimary,
+      $nest: {
+        '.ms-ContextualMenu-item:hover': {
+          color: theme.colors.text,
+          background: theme.colors.card
+        },
+        '.ms-ContextualMenu-itemText': {
+          color: theme.colors.card,
+          $nest: {
+            '&:hover': {
+              color: theme.colors.text
+            }
+          }
+        },
+        '.ms-ContextualMenu-link:hover,.ms-ContextualMenu-link.is-expanded': {
+          backgroundColor: theme.colors.card,
+          $nest: {
+            '.ms-ContextualMenu-itemText': {
+              color: theme.colors.text
+            }
+          }
+        },
+      }
+    },
+    calloutContainer: {
+      boxShadow: `0px 3px 7px ${theme.colors.card}`,
+    }
   })
 
-
+interface HeaderItem {
+  /** An identifying name for this component. */
+  name: S
+  /** The text to be displayed. If blank, the `path` is used as the label. */
+  label: S
+  /** The path or URL to link to. */
+  path?: S
+  /** Where to display the link. Setting this to `'_blank'` opens the link in a new tab or window. */
+  target?: S
+  /** Nested header items for sub menus. */
+  items?: HeaderItem[]
+}
 /**
  * Render a page header displaying a title, subtitle and an optional navigation menu.
  * Header cards are typically used for top-level navigation.
@@ -76,7 +123,7 @@ interface State {
   /** The navigation menu to display when the header's icon is clicked. */
   nav?: NavGroup[]
   /** Items that should be displayed on the right side of the header. */
-  items?: Command[]
+  items?: HeaderItem[]
 }
 
 const
@@ -95,7 +142,44 @@ const
         </Fluent.Panel>
       )
     return { render, isOpenB }
+  }),
+  Toolbar = bond(({ items }: { items: HeaderItem[] }) => {
+    const
+      mapToMenu = (items?: HeaderItem[]): Fluent.IContextualMenuItem[] | undefined => {
+        return items?.length
+          ? items.map(({ name, label, path, items, target }): Fluent.IContextualMenuItem => ({
+            key: name,
+            text: label,
+            href: path,
+            target,
+            className: css.toolbarMenu,
+            onClick: () => {
+              if (name.startsWith('#')) {
+                window.location.hash = name.substr(1)
+                return
+              }
+              qd.args[name] = true
+              qd.sync()
+            },
+            subMenuProps: items ? { items: mapToMenu(items)! } : undefined
+          }))
+          : undefined
+      },
+      toolbar = () => items.map(({ name, label, path, items }) => {
+        const
+          menuItems = mapToMenu(items),
+          menuProps: Fluent.IContextualMenuProps | undefined = menuItems
+            ? { items: menuItems, calloutProps: { className: css.calloutContainer } }
+            : undefined
+        return (
+          <Fluent.CommandButton data-test={name} key={name} href={path} className={css.toolbar} text={label} menuProps={menuProps} />
+        )
+      }),
+      render = () => <div>{toolbar()}</div>
+
+    return { render }
   })
+
 
 export const
   View = bond(({ name, state, changed }: Card<State>) => {
@@ -124,7 +208,7 @@ export const
               <div className={css.subtitle}>{subtitle}</div>
             </Fluent.StackItem>
             {nav && <Navigation items={nav} isOpenB={navB} />}
-            {items && <Toolbar name={`${name}-toolbar`} changed={changed} state={{ items }} />}
+            {items && <Toolbar items={items} />}
           </Fluent.Stack>
         )
       }
