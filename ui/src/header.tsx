@@ -35,6 +35,8 @@ const
     lhs: {
       width: iconSize + 15,
       height: iconSize + 15,
+      display: 'flex',
+      alignItems: 'center',
       cursor: 'default',
     },
     burger: {
