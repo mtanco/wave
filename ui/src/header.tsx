@@ -90,9 +90,15 @@ const
           $nest: {
             '.ms-ContextualMenu-itemText': {
               color: theme.colors.text
+            },
+            '.ms-ContextualMenu-submenuIcon': {
+              color: theme.colors.text
             }
           }
         },
+        '.ms-ContextualMenu-submenuIcon': {
+          color: theme.colors.card,
+        }
       }
     },
     calloutContainer: {
