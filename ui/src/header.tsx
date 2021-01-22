@@ -29,6 +29,9 @@ const
       alignItems: 'center',
       padding: padding(8, 15),
     },
+    rhs: {
+      flexGrow: 1
+    },
     lhs: {
       width: iconSize + 15,
       height: iconSize + 15,
@@ -145,6 +148,14 @@ const
   }),
   Toolbar = bond(({ items }: { items: HeaderItem[] }) => {
     const
+      onClick = (name: S) => () => {
+        if (name.startsWith('#')) {
+          window.location.hash = name.substr(1)
+          return
+        }
+        qd.args[name] = true
+        qd.sync()
+      },
       mapToMenu = (items?: HeaderItem[]): Fluent.IContextualMenuItem[] | undefined => {
         return items?.length
           ? items.map(({ name, label, path, items, target }): Fluent.IContextualMenuItem => ({
@@ -153,14 +164,7 @@ const
             href: path,
             target,
             className: css.toolbarMenu,
-            onClick: () => {
-              if (name.startsWith('#')) {
-                window.location.hash = name.substr(1)
-                return
-              }
-              qd.args[name] = true
-              qd.sync()
-            },
+            onClick: onClick(name),
             subMenuProps: items ? { items: mapToMenu(items)! } : undefined
           }))
           : undefined
@@ -172,10 +176,18 @@ const
             ? { items: menuItems, calloutProps: { className: css.calloutContainer } }
             : undefined
         return (
-          <Fluent.CommandButton data-test={name} key={name} href={path} className={css.toolbar} text={label} menuProps={menuProps} />
+          <Fluent.CommandButton
+            data-test={name}
+            key={name}
+            href={path}
+            onClick={onClick(name)}
+            className={css.toolbar}
+            text={label}
+            menuProps={menuProps}
+          />
         )
       }),
-      render = () => <div>{toolbar()}</div>
+      render = () => <>{toolbar()}</>
 
     return { render }
   })
@@ -191,25 +203,25 @@ export const
           { title, subtitle, icon, icon_color, nav, items } = state,
           burger = nav
             ? (
-              <Fluent.Stack horizontal verticalAlign='center' className={clas(css.burger, css.lhs)} onClick={showNav}>
+              <div className={clas(css.burger, css.lhs)} onClick={showNav}>
                 <Fluent.FontIcon className={css.icon} iconName='GlobalNavButton' />
-              </Fluent.Stack>
+              </div>
             ) : (
-              <Fluent.Stack horizontal verticalAlign='center' className={css.lhs}>
+              <div className={css.lhs}>
                 <Fluent.FontIcon className={css.icon} iconName={icon ?? 'WebComponents'} style={{ color: theme.color(icon_color) }} />
-              </Fluent.Stack>
+              </div>
             )
 
         return (
-          <Fluent.Stack data-test={name} horizontal verticalAlign='center'>
+          <div data-test={name} className={css.card} >
             {burger}
-            <Fluent.StackItem grow={1}>
+            <div className={css.rhs}>
               <div className={css.title}>{title}</div>
               <div className={css.subtitle}>{subtitle}</div>
-            </Fluent.StackItem>
+            </div>
             {nav && <Navigation items={nav} isOpenB={navB} />}
             {items && <Toolbar items={items} />}
-          </Fluent.Stack>
+          </div>
         )
       }
     return { render, changed }
