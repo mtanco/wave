@@ -14,7 +14,7 @@
 
 import * as Fluent from '@fluentui/react'
 import React from 'react'
-import { S } from './qd'
+import { S, B } from './qd'
 
 /**
  * Create a message bar.
@@ -30,6 +30,8 @@ export interface MessageBar {
   text?: S
   /** An identifying name for this component. */
   name?: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 const

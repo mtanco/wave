@@ -15,7 +15,7 @@
 import React from 'react'
 import { stylesheet } from 'typestyle'
 import { cards, grid } from './layout'
-import { bond, Card, S, xid } from './qd'
+import { bond, Card, S, xid, B } from './qd'
 
 const
   css = stylesheet({
@@ -52,6 +52,8 @@ export interface Frame {
   height?: S
   /** An identifying name for this component. */
   name?: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 /**

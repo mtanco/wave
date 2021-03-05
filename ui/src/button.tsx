@@ -52,6 +52,8 @@ export interface Button {
   disabled?: B
   /** True if the button should be rendered as link text and not a standard button. */
   link?: B
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** An optional tooltip message displayed when a user clicks the help icon to the right of the component. */
   tooltip?: S
 }
@@ -64,6 +66,8 @@ export interface Buttons {
   justify?: 'start' | 'end' | 'center' | 'between' | 'around'
   /** An identifying name for this component. */
   name?: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 

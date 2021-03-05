@@ -16,7 +16,7 @@ import React from 'react'
 import { stylesheet } from 'typestyle'
 import vegaEmbed from 'vega-embed'
 import { cards, grid } from './layout'
-import { bond, Card, debounce, Rec, S, unpack, xid } from './qd'
+import { bond, Card, debounce, Rec, S, unpack, xid, B } from './qd'
 
 const
   css = stylesheet({
@@ -54,6 +54,8 @@ export interface VegaVisualization {
   height?: S
   /** An identifying name for this component. */
   name?: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 export const

@@ -32,6 +32,8 @@ export interface Label {
   required?: B
   /** True if the label should be disabled. */
   disabled?: B
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** An optional tooltip message displayed when a user clicks the help icon to the right of the component. */
   tooltip?: S
   /** An identifying name for this component. */

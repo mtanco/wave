@@ -15,7 +15,7 @@
 import * as Fluent from '@fluentui/react'
 import React from 'react'
 import { stylesheet } from 'typestyle'
-import { S } from './qd'
+import { S, B } from './qd'
 
 const
   css = stylesheet({
@@ -34,6 +34,8 @@ export interface Separator {
   label?: S
   /** An identifying name for this component. */
   name?: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 export const

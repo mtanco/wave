@@ -17,7 +17,7 @@ import React from 'react'
 import { stylesheet } from 'typestyle'
 import { CardMenu } from './card_menu'
 import { Markdown } from './markdown'
-import { Dict, S } from './qd'
+import { Dict, S, B } from './qd'
 import { margin } from './theme'
 import { Command } from './toolbar'
 
@@ -25,6 +25,8 @@ import { Command } from './toolbar'
 export interface Text {
   /** The text content. */
   content: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** The font size of the text content. */
   size?: 'xl' | 'l' | 'm' | 's' | 'xs'
   /** Tooltip message. */
@@ -37,6 +39,8 @@ export interface Text {
 export interface TextXl {
   /** The text content. */
   content: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** Tooltip message. */
   tooltip?: S
   /** Contextual menu commands for this component. */
@@ -49,6 +53,8 @@ export interface TextXl {
 export interface TextL {
   /** The text content. */
   content: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** Tooltip message. */
   tooltip?: S
   /** Contextual menu commands for this component. */
@@ -61,6 +67,8 @@ export interface TextL {
 export interface TextM {
   /** The text content. */
   content: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** Tooltip message. */
   tooltip?: S
   /** An identifying name for this component. */
@@ -71,6 +79,8 @@ export interface TextM {
 export interface TextS {
   /** The text content. */
   content: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** Tooltip message. */
   tooltip?: S
   /** An identifying name for this component. */
@@ -81,6 +91,8 @@ export interface TextS {
 export interface TextXs {
   /** The text content. */
   content: S
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** Tooltip message. */
   tooltip?: S
   /** An identifying name for this component. */

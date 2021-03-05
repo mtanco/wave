@@ -53,6 +53,8 @@ export interface ChoiceGroup {
   required?: B
   /** True if the form should be submitted when the selection changes. */
   trigger?: B
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** An optional tooltip message displayed when a user clicks the help icon to the right of the component. */
   tooltip?: S
 }

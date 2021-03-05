@@ -32,6 +32,8 @@ export interface Expander {
   expanded?: B
   /** List of components to be hideable by the expander. */
   items?: Component[]
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 const

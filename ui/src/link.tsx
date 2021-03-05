@@ -34,6 +34,8 @@ export interface Link {
   download?: B
   /** True if the link should be rendered as a button. */
   button?: B
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** Where to display the link. Setting this to an empty string or `'_blank'` opens the link in a new tab or window. */
   target?: S
   /** An optional tooltip message displayed when a user clicks the help icon to the right of the component. */

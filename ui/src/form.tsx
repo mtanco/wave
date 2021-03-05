@@ -139,6 +139,8 @@ interface Inline {
   justify?: 'start' | 'end'
   /** Whether to display the components inset from the parent form, with a contrasting background. */
   inset?: B
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
 }
 
 /** Create a form. */

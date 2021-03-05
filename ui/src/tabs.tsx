@@ -39,6 +39,8 @@ export interface Tabs {
   value?: S
   /** The tabs in this tab bar. */
   items?: Tab[]
+  /** True if the component should be visible. Defaults to true. */
+  visible?: B
   /** True if tabs should be rendered as links instead of buttons. */
   link?: B
 }
