@@ -17,7 +17,7 @@ async def serve(q: Q):
                 ui.button(name='left2', label='Left2'),
                 ui.button(name='left3', label='Left3'),
             ]),
-            ui.inline(justify='end', items=[
+            ui.buttons(justify='end', items=[
                 ui.button(name='right1', label='Right1'),
                 ui.button(name='right2', label='Right2'),
                 ui.button(name='right3', label='Right3'),
@@ -30,7 +30,7 @@ async def serve(q: Q):
         items[0].text_xl,
         items[2].text_m,
         items[4].inline.items[0].button,
-        items[5].inline.items[2].button
+        items[5].buttons.items[2].button
     ]
     if q.args.hide:
         for i in items_to_hide:
