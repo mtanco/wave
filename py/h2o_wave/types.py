@@ -7113,7 +7113,7 @@ class Dialog:
 
 
 class Colors:
-    """Represetns colors to be used in your app.
+    """Represents colors to be used in your app.
     """
     def __init__(
             self,

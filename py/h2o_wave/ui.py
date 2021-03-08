@@ -2543,7 +2543,7 @@ def colors(
         page: str,
         primary: str,
 ) -> Colors:
-    """Represetns colors to be used in your app.
+    """Represents colors to be used in your app.
 
     Args:
         text: Base color of the textual components.

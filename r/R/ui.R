@@ -2934,7 +2934,7 @@ ui_dialog <- function(
   return(.o)
 }
 
-#' Represetns colors to be used in your app.
+#' Represents colors to be used in your app.
 #'
 #' @param text Base color of the textual components.
 #' @param card Card background color.
