@@ -1,4 +1,6 @@
-const examples = require('./examples');
+const examples = require('./examples')
+const components = require('./components')
+const cards = require('./cards')
 
 module.exports = {
   someSidebar: {
@@ -47,6 +49,8 @@ module.exports = {
       'backup',
     ],
     'Examples': examples.map(e => `examples/${e.slug}`),
+    'Components': components,
+    'Cards': cards,
     'API': [
       'api/index',
       'api/core',
