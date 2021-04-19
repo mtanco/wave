@@ -2010,6 +2010,31 @@ def inline(
     ))
 
 
+def clipboard(
+        value: str,
+        label: str,
+        name: Optional[str] = None,
+        multiline: Optional[bool] = None,
+) -> Component:
+    """Create a copy to clipboard component.
+    Use this component when you want to enable your users to quickly copy paste sections of text.
+
+    Args:
+        value: Text to be displayed inside the clipboard.
+        label: The text displayed above the clipboard.
+        name: An identifying name for this component.
+        multiline: True if the clipboard should allow multi-line text entry.
+    Returns:
+        A `h2o_wave.types.Clipboard` instance.
+    """
+    return Component(clipboard=Clipboard(
+        value,
+        label,
+        name,
+        multiline,
+    ))
+
+
 def form_card(
         box: str,
         items: Union[List[Component], str],
