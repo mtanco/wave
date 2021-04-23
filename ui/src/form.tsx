@@ -19,7 +19,7 @@ import { Button, Buttons, XButtons, XStandAloneButton } from './button'
 import { Checkbox, XCheckbox } from './checkbox'
 import { Checklist, XChecklist } from './checklist'
 import { ChoiceGroup, XChoiceGroup } from './choice_group'
-import { Clipboard, XClipboard } from "./clipboard"
+import { CopyableText, XCopyableText } from "./copyable_text"
 import { ColorPicker, XColorPicker } from './color_picker'
 import { Combobox, XCombobox } from './combobox'
 import { DatePicker, XDatePicker } from './date_picker'
@@ -131,7 +131,7 @@ export interface Component {
   /** Inline components. */
   inline?: Inline
   /** Clipboard. */
-  clipboard?: Clipboard
+  copyable_text?: CopyableText
 }
 
 /** Create an inline (horizontal) list of components. */
@@ -255,7 +255,7 @@ const
     if (m.vega_visualization) return <XVegaVisualization model={m.vega_visualization} />
     if (m.stats) return <XStats model={m.stats} />
     if (m.inline) return <XInline model={m.inline} />
-    if (m.clipboard) return <XClipboard model={m.clipboard} />
+    if (m.copyable_text) return <XCopyableText model={m.copyable_text} />
     return <Fluent.MessageBar messageBarType={Fluent.MessageBarType.severeWarning}>This component could not be rendered.</Fluent.MessageBar>
   }
 
