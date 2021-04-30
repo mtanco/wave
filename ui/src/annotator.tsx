@@ -2,7 +2,7 @@ import * as Fluent from '@fluentui/react'
 import React from 'react'
 import { stylesheet } from 'typestyle'
 import { B, bond, box, Id, qd, Rec, S, U } from './qd'
-import { clas, cssVar, margin, getContrast } from './theme'
+import { clas, cssVar, margin, getContrast, padding } from './theme'
 
 /** Create a tag. */
 interface AnnotatorTag {
@@ -50,7 +50,7 @@ const css = stylesheet({
     margin: 4,
     minWidth: 60,
     textAlign: 'center',
-    borderRadius: 20,
+    borderRadius: 2,
     cursor: 'pointer'
   },
   activeTag: {
@@ -58,7 +58,17 @@ const css = stylesheet({
   },
   mark: {
     position: 'relative',
-    padding: 5,
+    padding: padding(5, 0),
+  },
+  firstMark: {
+    paddingLeft: 5,
+    borderTopLeftRadius: 2,
+    borderBottomLeftRadius: 2
+  },
+  lastMark: {
+    paddingRight: 5,
+    borderTopRightRadius: 2,
+    borderBottomRightRadius: 2
   },
   content: {
     margin: margin(10, 0),
@@ -164,9 +174,15 @@ export const
       getMark = (text: S, idx: U, tag: S) => {
         const
           color = tagColorMap.get(tag)!,
-          removeIconStyle = { visibility: shouldShowRemoveIcon(idx, tag) ? 'visible' : 'hidden' }
+          removeIconStyle = { visibility: shouldShowRemoveIcon(idx, tag) ? 'visible' : 'hidden' },
+          isFirst = tokensB()[idx - 1]?.tag !== tag,
+          isLast = tokensB()[idx + 1]?.tag !== tag
         return (
-          <mark onMouseOver={onMarkHover(idx)} onMouseOut={onMarkMouseOut} className={clas('wave-w5', css.mark)} style={{ backgroundColor: cssVar(color), color: getContrast(color) }}>
+          <mark
+            onMouseOver={onMarkHover(idx)}
+            onMouseOut={onMarkMouseOut}
+            className={clas('wave-w5', css.mark, isFirst ? css.firstMark : isLast ? css.lastMark : '')}
+            style={{ backgroundColor: cssVar(color), color: getContrast(color) }}>
             {text}
             <Fluent.Icon iconName='CircleAdditionSolid' styles={{ root: removeIconStyle }} className={clas(css.removeIcon, 'wave-w6')} onMouseUp={removeAnnotation(idx)} />
             {/* HACK: Put color underlay under remove icon because its glyph is transparent and doesn't look good on tags. */}
