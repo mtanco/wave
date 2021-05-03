@@ -13,12 +13,13 @@
 // limitations under the License.
 
 import * as Fluent from '@fluentui/react'
+import { B, box, Dict, Id, S, U, wave } from 'h2o-wave'
 import React from 'react'
 import { stylesheet } from 'typestyle'
 import { IconTableCellType, XIconTableCellType } from "./icon_table_cell_type"
 import { ProgressTableCellType, XProgressTableCellType } from "./progress_table_cell_type"
-import { B, bond, box, Dict, Id, qd, S, U } from './qd'
-import { displayMixin, rem, cssVar } from './theme'
+import { cssVar, displayMixin, rem } from './theme'
+import { bond } from './ui'
 
 /** Defines cell content to be rendered instead of a simple text. */
 interface TableCellType {
@@ -95,6 +96,8 @@ export interface Table {
   height?: S
   /** The names of the selected rows. If this parameter is set, multiple selections will be allowed (`multiple` is assumed to be `True`). */
   values?: S[]
+  /** Controls visibility of table rows when `multiple` is set to `True`. Defaults to 'on-hover'. */
+  checkbox_visibility?: 'always' | 'on-hover' | 'hidden'
   /** True if the component should be visible. Defaults to true. */
   visible?: B
   /** An optional tooltip message displayed when a user clicks the help icon to the right of the component. */
@@ -135,6 +138,11 @@ const
       }
     }
   }),
+  checkboxVisibilityMap = {
+    'always': Fluent.CheckboxVisibility.always,
+    'on-hover': Fluent.CheckboxVisibility.onHover,
+    'hidden': Fluent.CheckboxVisibility.hidden,
+  },
   groupByF = function <T extends Dict<any>>(arr: T[], key: S): Dict<any> {
     return arr.reduce((rv, x: T) => {
       (rv[x[key]] = rv[x[key]] || []).push(x)
@@ -172,7 +180,7 @@ const
 
 export const
   XTable = bond(({ model: m }: { model: Table }) => {
-    qd.args[m.name] = []
+    wave.args[m.name] = []
     const
       items = m.rows.map(r => {
         const item: Fluent.IObjectWithKey & Dict<any> = { key: r.name }
@@ -379,11 +387,9 @@ export const
           </Fluent.Sticky>
         )
       },
-      onRenderRow = (props?: Fluent.IDetailsRowProps) => {
-        if (!props) return <span />
-
-        return <Fluent.DetailsRow {...props} styles={{ cell: { alignSelf: 'center' }, root: { width: '100%' } }} />
-      },
+      onRenderRow = (props?: Fluent.IDetailsRowProps) => props
+        ? <Fluent.DetailsRow {...props} styles={{ cell: { alignSelf: 'center' }, checkCell: { display: 'flex', alignItems: 'center' }, root: { width: '100%' } }} />
+        : null,
       onColumnClick = (e: React.MouseEvent<HTMLElement>, column: QColumn) => {
         const isMenuClicked = (e.target as HTMLElement).getAttribute('data-icon-name') === 'ChevronDown'
 
@@ -422,18 +428,18 @@ export const
       primaryColumnKey = m.columns.find(c => c.link)?.name || (m.columns[0].link === false ? undefined : m.columns[0].name),
       selection = new Fluent.Selection({
         onSelectionChanged: () => {
-          qd.args[m.name] = selection.getSelection().map(item => item.key as S)
+          wave.args[m.name] = selection.getSelection().map(item => item.key as S)
         }
       }),
       init = () => {
         if (isMultiple && m.values) {
           m.values.forEach(v => selection.setKeySelected(v, true, false))
-          qd.args[m.name] = m.values
+          wave.args[m.name] = m.values
         }
       },
       onItemInvoked = (item: Fluent.IObjectWithKey & Dict<any>) => {
-        qd.args[m.name] = [item.key as S]
-        qd.sync()
+        wave.args[m.name] = [item.key as S]
+        wave.sync()
       },
       onRenderItemColumn = (item?: Fluent.IObjectWithKey & Dict<any>, _index?: number, col?: QColumn) => {
         if (!item || !col) return <span />
@@ -441,8 +447,8 @@ export const
         const v = item[col.fieldName as S]
         if (col.key === primaryColumnKey && !isMultiple) {
           const onClick = () => {
-            qd.args[m.name] = [item.key as S]
-            qd.sync()
+            wave.args[m.name] = [item.key as S]
+            wave.sync()
           }
           return <Fluent.Link onClick={onClick}>{v}</Fluent.Link>
         }
@@ -483,6 +489,7 @@ export const
             onRenderItemColumn={onRenderItemColumn}
             onRenderDetailsHeader={onRenderDetailsHeader}
             onRenderDetailsFooter={onRenderDetailsFooter}
+            checkboxVisibility={checkboxVisibilityMap[m.checkbox_visibility || 'on-hover']}
           />
           {colContextMenuListB() && <Fluent.ContextualMenu {...(colContextMenuListB() as Fluent.IContextualMenuProps)} />}
         </>

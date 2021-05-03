@@ -10,26 +10,23 @@
   <img alt="Contributor covenant" src="https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg">
 </p>
 
-### Realtime Web Apps and Dashboards for Python
+### Realtime Web Apps and Dashboards for Python and R
+
+**New!** *[R Language API](https://wave.h2o.ai/blog/r-api-preview) Build and control Wave dashboards using R!*
 
 **New!** *Easily integrate AI/ML models into your apps using [Wave ML](https://github.com/h2oai/wave-ml) for automatic machine learning.*
 
-H2O Wave is a software stack for building beautiful, low-latency, realtime, browser-based applications and dashboards entirely in Python without using HTML, Javascript, or CSS.
+H2O Wave is a software stack for building beautiful, low-latency, realtime, browser-based applications and dashboards entirely in Python/R without using HTML, Javascript, or CSS.
 
 H2O Wave excels at capturing information from multiple sources and broadcasting them live over the web, letting you build and deploy realtime analytics with dramatically less effort.
 
-- [Download](https://github.com/h2oai/wave/releases) / [How to install](https://h2oai.github.io/wave/docs/installation/)
-- [Documentation](https://h2oai.github.io/wave/): [Getting Started](https://h2oai.github.io/wave/docs/getting-started/) / [Gallery and Examples](https://h2oai.github.io/wave/docs/examples/) / [Python API](https://h2oai.github.io/wave/docs/api/index/)
+- [Download](https://github.com/h2oai/wave/releases) / [How to install](https://wave.h2o.ai/docs/installation/)
+- [Documentation](https://wave.h2o.ai/): [Getting Started](https://wave.h2o.ai/docs/getting-started/) / [Gallery and Examples](https://wave.h2o.ai/docs/examples/) / [Python API](https://wave.h2o.ai/docs/api/index/)
 - [Roadmap 2021](https://github.com/h2oai/wave/issues/693)
+- [Developing](https://github.com/h2oai/wave/blob/master/.github/CONTRIBUTING.md#development-setup)
 - [Discuss / Support / Q&A / Ideas](https://github.com/h2oai/wave/discussions)
 - [Report a problem](https://github.com/h2oai/wave/issues/new/choose)
-- [Blog](https://h2oai.github.io/wave/blog/) / [@h2o_wave](https://twitter.com/h2o_wave)
-
----
-
-:warning: **H2O Wave is pre-alpha.** The software is not yet stable enough for production use and has known security issues.
-
----
+- [Blog](https://wave.h2o.ai/blog/) / [@h2o_wave](https://twitter.com/h2o_wave)
 
 ### Responsive Layouts
 
@@ -51,17 +48,17 @@ Code: https://github.com/h2oai/wave/tree/master/py/demo
 
 ### Themes
 
-(Coming soon!)
-
 ![Light Theme](assets/visuals/theme-light.png)
-
-![Dark Theme](assets/visuals/theme-dark.png)
 
 ![Neon Theme](assets/visuals/theme-neon.png)
 
+(Coming soon!)
+
+![Dark Theme](assets/visuals/theme-dark.png)
+
 ### 80+ components, 175+ examples
 
-More at https://h2oai.github.io/wave/docs/examples
+More at https://wave.h2o.ai/docs/examples
 
 ![Components](assets/visuals/components-1.png)
 

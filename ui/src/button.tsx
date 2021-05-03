@@ -13,12 +13,13 @@
 // limitations under the License.
 
 import * as Fluent from '@fluentui/react'
+import { B, Dict, Id, S, wave } from 'h2o-wave'
 import React from 'react'
 import { stylesheet } from 'typestyle'
 import { Component } from './form'
-import { B, bond, Dict, Id, qd, S } from './qd'
 import { displayMixin } from './theme'
 import { XToolTip } from './tooltip'
+import { bond } from './ui'
 
 /**
  * Create a button.
@@ -53,6 +54,8 @@ export interface Button {
   disabled?: B
   /** True if the button should be rendered as link text and not a standard button. */
   link?: B
+  /** An optional icon to display next to the button label (not applicable for links). */
+  icon?: S
   /** True if the component should be visible. Defaults to true. */
   visible?: B
   /** An optional tooltip message displayed when a user clicks the help icon to the right of the component. */
@@ -88,27 +91,28 @@ const
 
 const
   XButton = bond(({ model: m }: { model: Button }) => {
-    qd.args[m.name] = false
+    wave.args[m.name] = false
     const
       onClick = () => {
         if (m.name.startsWith('#')) {
           window.location.hash = m.name.substr(1)
           return
         }
-        qd.args[m.name] = m.value === undefined || m.value
-        qd.sync()
+        wave.args[m.name] = m.value === undefined || m.value
+        wave.sync()
       },
       render = () => {
         if (m.link) {
           return <Fluent.Link data-test={m.name} disabled={m.disabled} onClick={onClick}>{m.label}</Fluent.Link>
         }
+        const btnProps: Fluent.IButtonProps = { text: m.label, disabled: m.disabled, onClick, iconProps: { iconName: m.icon } }
         return m.caption?.length
           ? m.primary
-            ? <Fluent.CompoundButton data-test={m.name} primary text={m.label} secondaryText={m.caption} disabled={m.disabled} onClick={onClick} />
-            : <Fluent.CompoundButton data-test={m.name} text={m.label} secondaryText={m.caption} disabled={m.disabled} onClick={onClick} />
+            ? <Fluent.CompoundButton {...btnProps} data-test={m.name} primary secondaryText={m.caption} />
+            : <Fluent.CompoundButton {...btnProps} data-test={m.name} secondaryText={m.caption} />
           : m.primary
-            ? <Fluent.PrimaryButton data-test={m.name} text={m.label} disabled={m.disabled} onClick={onClick} />
-            : <Fluent.DefaultButton data-test={m.name} text={m.label} disabled={m.disabled} onClick={onClick} />
+            ? <Fluent.PrimaryButton {...btnProps} data-test={m.name} />
+            : <Fluent.DefaultButton {...btnProps} data-test={m.name} />
       }
     return { render }
   })

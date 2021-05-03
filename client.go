@@ -15,7 +15,7 @@
 package wave
 
 import (
-	"bytes"
+	"context"
 	"encoding/json"
 	"time"
 
@@ -49,6 +49,7 @@ var (
 // Client represent a websocket (UI) client.
 type Client struct {
 	id       string          // unique id
+	auth     *Auth           // auth provider, might be nil
 	addr     string          // remote IP:port, used for logging only
 	session  *Session        // end-user session
 	broker   *Broker         // broker
@@ -58,8 +59,23 @@ type Client struct {
 	editable bool            // allow editing? // TODO move to user; tie to role
 }
 
-func newClient(addr string, session *Session, broker *Broker, conn *websocket.Conn, editable bool) *Client {
-	return &Client{uuid.New().String(), addr, session, broker, conn, nil, make(chan []byte, 256), editable}
+func newClient(addr string, auth *Auth, session *Session, broker *Broker, conn *websocket.Conn, editable bool) *Client {
+	return &Client{uuid.New().String(), auth, addr, session, broker, conn, nil, make(chan []byte, 256), editable}
+}
+
+func (c *Client) refreshToken() error {
+	if c.auth != nil && c.session.token != nil {
+		// TODO: use more meaningful context, e.g. context of current message
+		ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
+		defer cancel()
+
+		token, err := c.auth.ensureValidOAuth2Token(ctx, c.session.token)
+		if err != nil {
+			return err
+		}
+		c.session.token = token
+	}
+	return nil
 }
 
 func (c *Client) listen() {
@@ -82,6 +98,12 @@ func (c *Client) listen() {
 			break
 		}
 
+		if err := c.refreshToken(); err != nil {
+			// token refresh failed, this is not fatal err, try next time
+			// TODO kick user out?
+			echo(Log{"t": "refresh_oauth2_token", "client": c.addr, "err": err.Error()})
+		}
+
 		m := parseMsg(msg)
 		switch m.t {
 		case patchMsgT:
@@ -94,7 +116,7 @@ func (c *Client) listen() {
 				echo(Log{"t": "query", "client": c.addr, "route": m.addr, "error": "service unavailable"})
 				continue
 			}
-			app.forward(c.format(m.data))
+			app.forward(c.id, c.session, m.data)
 		case watchMsgT:
 			c.subscribe(m.addr) // subscribe even if page is currently NA
 
@@ -113,7 +135,7 @@ func (c *Client) listen() {
 					}
 				}
 
-				app.forward(c.format(boot))
+				app.forward(c.id, c.session, boot)
 				continue
 			}
 
@@ -190,43 +212,4 @@ func (c *Client) flush() {
 
 func (c *Client) quit() {
 	close(c.data)
-}
-
-var (
-	usernameHeader     = []byte("u:")
-	subjectHeader      = []byte("s:")
-	clientIDHeader     = []byte("c:")
-	accessTokenHeader  = []byte("a:")
-	refreshTokenHeader = []byte("r:")
-	queryBodySep       = []byte("\n\n")
-)
-
-func (c *Client) format(data []byte) []byte {
-	var buf bytes.Buffer
-
-	s := c.session
-
-	buf.Write(usernameHeader)
-	buf.WriteString(s.username)
-	buf.WriteByte('\n')
-
-	buf.Write(subjectHeader)
-	buf.WriteString(s.subject)
-	buf.WriteByte('\n')
-
-	buf.Write(clientIDHeader)
-	buf.WriteString(c.id)
-	buf.WriteByte('\n')
-
-	buf.Write(accessTokenHeader)
-	buf.WriteString(s.token.AccessToken)
-	buf.WriteByte('\n')
-
-	buf.Write(refreshTokenHeader)
-	buf.WriteString(s.token.AccessToken)
-	buf.Write(queryBodySep)
-
-	buf.Write(data)
-
-	return buf.Bytes()
 }
