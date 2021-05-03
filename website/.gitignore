@@ -23,13 +23,10 @@ yarn-error.log*
 
 # Generated content
 /examples.js
-/components.js
-/cards.js
+/showcase.js
 /docs/examples/*.md
 /docs/api/*.md
-/docs/components/*.md
-/docs/components/assets/*
-/docs/cards/*.md
-/docs/cards/assets/*
+/docs/showcase/*.md
+/docs/showcase/assets/*
 /serve-linux
 /serve-darwin
